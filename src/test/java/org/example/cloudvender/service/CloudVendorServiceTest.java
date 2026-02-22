@@ -64,4 +64,23 @@ public class CloudVendorServiceTest {
 
     }
 
+    @Test
+    void shouldReturnNotFoundWhenDeletingNOnExistingVendor() {
+        when(cloudVendorRepo.existsById(1L)).thenReturn(false);
+        String result = cloudVendorService.deleteVendor(1L);
+        assertEquals("Vendor Not Found", result);
+
+    }
+
+    @Test
+    void shouldUpdateVendorWhenExisted() {
+        CloudVendor existing = new CloudVendor(1L, "Shari", "Utrecht", "123");
+        CloudVendor updated = new CloudVendor(1L, "ALi", "Amersfoort", "123");
+        when(cloudVendorRepo.findById(1L)).thenReturn(Optional.of(existing));
+        String result = cloudVendorService.updateVendor(1L, updated);
+        assertEquals("Vendor updated", result);
+        assertEquals("ALi", existing.getName());
+        verify(cloudVendorRepo).save(existing);
+    }
+
 }
