@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+
+  db:
+    image: postgres:15
+    container_name: cloudvendor-db
+    environment:
+      POSTGRES_DB: cloudvendor
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+
+  app:
+    build: .
+    container_name: cloudvendor-app
+    ports:
+      - "8081:8081"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/cloudvendor
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: password
